@@ -1,0 +1,23 @@
+{
+  "name": "gptchat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "public/script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthieuDeroir/gptchat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatthieuDeroir/gptchat/issues"
+  },
+  "homepage": "https://github.com/MatthieuDeroir/gptchat#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
