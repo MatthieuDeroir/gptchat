@@ -1,0 +1,58 @@
+/* Style global de la page */
+body, html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Conteneur du chat */
+#chat-container {
+    width: 100%; /* Largeur maximale */
+    height: 100%; /* Hauteur maximale */
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Zone de visualisation des messages */
+#chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+/* Pied de page pour l'entrée de texte */
+.card-footer {
+    min-height: 60px;
+}
+
+/* Styles supplémentaires pour le mode sombre, si utilisé */
+.dark-mode {
+    background-color: #121212;
+    border-color: #ffffff;
+}
+
+.dark-mode #chat-box {
+    background-color: #1e1e1e;
+    border-color: #3a3a3a;
+    color: #ffffff;
+}
+
+.dark-mode #chat-title{
+    color: #ffffff;
+}
+
+
+.dark-mode .card {
+    background-color: #1e1e1e;
+}
+
+.dark-mode .input-group-text, .dark-mode .form-control {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+}

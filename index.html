@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat(on)bot GPT-4</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card">
+        <div id="chat-title" class="card-header">
+            Chat(on)bot GPT-4
+            <span id="cost-display" style="float: right;">Coût de la session: $0.00</span>
+        </div>
+        <div class="card-body" id="chat-box" style="height: 400px; overflow-y: auto;">
+            <div id="messages"></div>
+        </div>
+        <div class="card-footer">
+            <div class="input-group">
+                <input type="text" id="input-message" class="form-control" placeholder="Tapez votre message ici...">
+                <div class="input-group-append">
+                    <button id="send-button" class="btn btn-primary">Envoyer</button>
+                    <button id="dark-mode-toggle" class="btn btn-secondary">Mode Sombre</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
