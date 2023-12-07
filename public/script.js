@@ -68,7 +68,7 @@ function sendMessageToAPI(message) {
     }
 
     var data = {
-        "model":"gpt-4",
+        "model":"gpt-4-1106-preview",
         "messages": [{
             "role":"user",
             "content": message
