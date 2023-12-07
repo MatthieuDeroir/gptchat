@@ -1,19 +1,17 @@
-
-
-
 document.getElementById('save-api-token').addEventListener('click', function () {
-    let apiKey = document.getElementById('api-key').value;
-    console.log("API key: ", apiKey)
-    localStorage.setItem('apiKey', apiKey);
-    document.getElementById('api-key').value = '';
-    document.getElementById('api-key').placeholder = 'Clé API enregistrée !';
-    document.getElementById('api-key').classList.add('saved');
+    var apiKey = document.getElementById('api-key').value;
+    if (apiKey) {
+        localStorage.setItem('apiKey', apiKey);
+        document.getElementById('api-key').value = '';
+        document.getElementById('api-key').placeholder = 'Clé API enregistrée !';
+        document.getElementById('api-key').classList.add('saved');
+    } else {
+        alert("Veuillez entrer une clé API valide.");
+    }
 });
+
 document.getElementById('send-button').addEventListener('click', function() {
-    var inputMessage = document.getElementById('input-message').value;
-    addMessageToChat("Vous", inputMessage);
-    document.getElementById('input-message').value = ''; // Efface le message de l'input
-    sendMessageToAPI(inputMessage);
+    sendMessage();
 });
 
 document.getElementById('input-message').addEventListener('keypress', function (e) {
@@ -26,9 +24,9 @@ function sendMessage() {
     var inputMessage = document.getElementById('input-message').value;
     if (inputMessage.trim() !== '') {
         addMessageToChat("Vous", inputMessage);
+        updateTokenCount(inputMessage, true);
         sendMessageToAPI(inputMessage);
-        updateTokenCount(inputMessage, true); // Mise à jour du nombre de tokens
-        document.getElementById('input-message').value = ''; // Efface le message de l'input
+        document.getElementById('input-message').value = '';
         scrollToLatestMessage();
     }
 }
@@ -44,80 +42,84 @@ document.getElementById('dark-mode-toggle').addEventListener('click', function()
 
 function addMessageToChat(sender, message) {
     var messagesDiv = document.getElementById('messages');
-    messagesDiv.innerHTML += '<b>' + sender + '</b>: ' + message + '<br>';
+    var newMessage = document.createElement('p');
+    newMessage.innerHTML = '<b>' + sender + '</b>: ' + escapeHtml(message);
+    messagesDiv.appendChild(newMessage);
+}
+
+function escapeHtml(text) {
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 
 function sendMessageToAPI(message) {
-    //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 // Remplacez ceci par votre clé API d'OpenAI
-    var apiURL = "https://api.openai.com/v1/chat/completions"; // URL de l'API GPT-4
+    var apiURL = "https://api.openai.com/v1/chat/completions";
+    var apiKey = localStorage.getItem('apiKey');
+
+    if (!apiKey) {
+        addMessageToChat("Erreur", "Clé API non configurée.");
+        return;
+    }
 
     var data = {
         "model":"gpt-4",
         "messages": [{
             "role":"user",
-            "content":`${message}`
+            "content": message
         }]
     };
-
-    // Appel de l'API GPT-4
-    // the body must contain the "model", "messages"
 
     fetch(apiURL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem('apiKey')}`
+            "Authorization": `Bearer ${apiKey}`
         },
         body: JSON.stringify(data)
-
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data.choices)
-
             if (data.choices && data.choices.length > 0 && data.choices[0].message.content) {
                 var reply = data.choices[0].message.content.trim();
                 addMessageToChat("GPT-4", reply);
-                updateTokenCount(reply); // Mise à jour du nombre de tokens
+                updateTokenCount(reply);
             } else {
-                addMessageToChat("GPT-4", "Verify your API Key before sending messages.");
+                addMessageToChat("GPT-4", "Aucune réponse reçue de l'API.");
             }
         })
         .catch(error => {
             console.error("Erreur lors de la communication avec l'API GPT-4:", error);
-            addMessageToChat("GPT-4", "Une erreur est survenue lors de la communication avec l'API.");
+            addMessageToChat("GPT-4", "Erreur lors de la communication avec l'API.");
         });
 }
 
-
-// Cost
+// Cost calculation
 let promptToken = 0;
 let sampledToken = 0;
-let totalTokens = 0;
 const promptTokenCost = 0.03 / 1000; // Coût par token
 const sampledTokenCost = 0.06 / 1000; // Coût par token
 
-
-
 function updateTokenCount(message, isPrompt = false) {
+    const tokenCount = countTokens(message);
     if (isPrompt) {
-        promptToken += countTokens(message);
-        console.log("prompt token count: ", promptToken)
+        promptToken += tokenCount;
     } else {
-        sampledToken += countTokens(message);
-        console.log("sampled token count: ", sampledToken)
+        sampledToken += tokenCount;
     }
     updateCostDisplay();
 }
 
 function countTokens(message) {
-    // Approximation simple : 4 caractères par token en moyenne
-    return Math.ceil(message.length / 4);
+    return Math.ceil(message.length / 4); // Approximation simple : 4 caractères par token en moyenne
 }
 
 function updateCostDisplay() {
-    const totalCost = (promptToken * promptTokenCost) + (sampledToken * sampledTokenCost)
-    console.log("total cost: ", totalCost)
-    document.getElementById('cost-display').textContent = `Total Session Cost: $${totalCost.toFixed(2)}`;
+    const totalCost = (promptToken * promptTokenCost) + (sampledToken * sampledTokenCost);
+    document.getElementById('cost-display').textContent = `Coût total de la session : $${totalCost.toFixed(2)}`;
 }
-
