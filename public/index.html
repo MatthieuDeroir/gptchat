@@ -11,19 +11,26 @@
 <body>
 <div class="container mt-5">
     <div class="card">
+        <div class="card-header">
+
+            <div class="input-group-append">
+                <input type="text" id="api-key" class="form-control" placeholder="Enter API Key here...">
+                <button id="save-api-token" class="btn btn-warning">Save</button>
+            </div>
+        </div>
         <div id="chat-title" class="card-header">
             Chat(on)bot GPT-4
-            <span id="cost-display" style="float: right;">Coût de la session: $0.00</span>
+            <span id="cost-display" style="float: right;">Total Session Cost: $0.00</span>
         </div>
         <div class="card-body" id="chat-box" style="height: 400px; overflow-y: auto;">
             <div id="messages"></div>
         </div>
         <div class="card-footer">
             <div class="input-group">
-                <input type="text" id="input-message" class="form-control" placeholder="Tapez votre message ici...">
+                <input type="text" id="input-message" class="form-control" placeholder="...">
                 <div class="input-group-append">
-                    <button id="send-button" class="btn btn-primary">Envoyer</button>
-                    <button id="dark-mode-toggle" class="btn btn-secondary">Mode Sombre</button>
+                    <button id="send-button" class="btn btn-primary">Send</button>
+                    <button id="dark-mode-toggle" class="btn btn-secondary">Dark mode</button>
                 </div>
             </div>
         </div>

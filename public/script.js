@@ -1,6 +1,18 @@
+
+
+
+document.getElementById('save-api-token').addEventListener('click', function () {
+    let apiKey = document.getElementById('api-key').value;
+    console.log("API key: ", apiKey)
+    localStorage.setItem('apiKey', apiKey);
+    document.getElementById('api-key').value = '';
+    document.getElementById('api-key').placeholder = 'Clé API enregistrée !';
+    document.getElementById('api-key').classList.add('saved');
+});
 document.getElementById('send-button').addEventListener('click', function() {
     var inputMessage = document.getElementById('input-message').value;
     addMessageToChat("Vous", inputMessage);
+    document.getElementById('input-message').value = ''; // Efface le message de l'input
     sendMessageToAPI(inputMessage);
 });
 
@@ -36,7 +48,7 @@ function addMessageToChat(sender, message) {
 }
 
 function sendMessageToAPI(message) {
-    var apiKey = "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"; // Remplacez ceci par votre clé API d'OpenAI
+    //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 // Remplacez ceci par votre clé API d'OpenAI
     var apiURL = "https://api.openai.com/v1/chat/completions"; // URL de l'API GPT-4
 
     var data = {
@@ -54,7 +66,7 @@ function sendMessageToAPI(message) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
+            "Authorization": `Bearer ${localStorage.getItem('apiKey')}`
         },
         body: JSON.stringify(data)
 
@@ -68,7 +80,7 @@ function sendMessageToAPI(message) {
                 addMessageToChat("GPT-4", reply);
                 updateTokenCount(reply); // Mise à jour du nombre de tokens
             } else {
-                addMessageToChat("GPT-4", "Désolé, je n'ai pas pu obtenir de réponse.");
+                addMessageToChat("GPT-4", "Verify your API Key before sending messages.");
             }
         })
         .catch(error => {
@@ -106,6 +118,6 @@ function countTokens(message) {
 function updateCostDisplay() {
     const totalCost = (promptToken * promptTokenCost) + (sampledToken * sampledTokenCost)
     console.log("total cost: ", totalCost)
-    document.getElementById('cost-display').textContent = `Coût de la session: $${totalCost.toFixed(2)}`;
+    document.getElementById('cost-display').textContent = `Total Session Cost: $${totalCost.toFixed(2)}`;
 }
 
