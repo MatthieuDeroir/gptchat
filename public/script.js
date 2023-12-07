@@ -102,8 +102,8 @@ function sendMessageToAPI(message) {
 // Cost calculation
 let promptToken = 0;
 let sampledToken = 0;
-const promptTokenCost = 0.03 / 1000; // Coût par token
-const sampledTokenCost = 0.06 / 1000; // Coût par token
+const promptTokenCost = 0.01 / 1000; // Coût par token
+const sampledTokenCost = 0.03 / 1000; // Coût par token
 
 function updateTokenCount(message, isPrompt = false) {
     const tokenCount = countTokens(message);
